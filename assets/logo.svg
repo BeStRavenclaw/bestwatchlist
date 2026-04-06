@@ -1,0 +1,30 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Monitor/Screen outer frame -->
+  <rect x="80" y="120" width="352" height="240" rx="12" fill="#000000" stroke="#D4AF37" stroke-width="10"/>
+
+  <!-- Screen inner glow -->
+  <rect x="100" y="140" width="312" height="200" rx="6" fill="#0A0A0A" opacity="0.8"/>
+
+  <!-- Clapperboard base (smaller, inside screen) -->
+  <rect x="166" y="210" width="180" height="100" rx="6" fill="#000000" stroke="#D4AF37" stroke-width="5"/>
+
+  <!-- Clapper stick (rectangular bar, tilted, same width as clapperboard base) -->
+  <path d="M 166 185 L 346 205 L 346 182 L 166 162 Z" fill="#D4AF37" stroke="#D4AF37" stroke-width="2"/>
+
+  <!-- Black and gold stripes on clapper (rectangular stripes, following tilt) -->
+  <path d="M 184 163.8 L 184 186.8 L 198 188.3 L 198 165.3 Z" fill="#000000"/>
+  <path d="M 220 167.7 L 220 190.7 L 234 192.2 L 234 169.2 Z" fill="#000000"/>
+  <path d="M 256 171.6 L 256 194.6 L 270 196.1 L 270 173.1 Z" fill="#000000"/>
+  <path d="M 292 175.5 L 292 198.5 L 306 200 L 306 177 Z" fill="#000000"/>
+  <path d="M 328 179.4 L 328 202.4 L 342 203.9 L 342 180.9 Z" fill="#000000"/>
+
+  <!-- Play button triangle (centered in clapperboard) -->
+  <polygon points="236,240 236,280 280,260" fill="#D4AF37"/>
+
+  <!-- Monitor stand -->
+  <rect x="226" y="360" width="60" height="40" fill="#D4AF37"/>
+  <rect x="176" y="400" width="160" height="12" rx="6" fill="#D4AF37"/>
+
+  <!-- Power indicator light -->
+  <circle cx="256" cy="350" r="6" fill="#D4AF37" opacity="0.8"/>
+</svg>

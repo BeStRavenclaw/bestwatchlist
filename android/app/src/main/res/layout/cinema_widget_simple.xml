@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/widget_background">
+
+    <!-- Header with Logo and App Title - clickable to open app -->
+    <LinearLayout
+        android:id="@+id/widget_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingBottom="12dp"
+        android:clickable="true"
+        android:focusable="true">
+
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/widget_logo"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/widget_logo"
+            android:contentDescription="BeStWatchList Logo"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <!-- App Title with styled text - using multiple TextViews to match in-app style -->
+        <TextView
+            android:id="@+id/widget_title_be"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Be"
+            android:textSize="12sp"
+            android:textColor="@color/widget_gold"
+            android:includeFontPadding="false" />
+        <TextView
+            android:id="@+id/widget_title_st"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="St"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/widget_gold"
+            android:includeFontPadding="false" />
+        <TextView
+            android:id="@+id/widget_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WatchList"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/widget_gold"
+            android:includeFontPadding="false"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/widget_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="8dp" />
+
+</LinearLayout>

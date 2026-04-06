@@ -1,0 +1,12 @@
+{
+  "name": "bestwatchlist-icon-generator",
+  "version": "1.0.0",
+  "description": "Icon generator for BeStWatchList logo",
+  "main": "generate-icons.js",
+  "scripts": {
+    "generate": "node generate-icons.js"
+  },
+  "dependencies": {
+    "sharp": "^0.33.0"
+  }
+}

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- BeStWatchList Logo for Widget - Transparent background version -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+
+    <!-- Monitor/Screen outer frame -->
+    <path
+        android:strokeColor="#D4AF37"
+        android:strokeWidth="10"
+        android:fillColor="#000000"
+        android:pathData="M80,120 L432,120 Q444,120 444,132 L444,348 Q444,360 432,360 L80,360 Q68,360 68,348 L68,132 Q68,120 80,120 Z"/>
+
+    <!-- Screen inner glow -->
+    <path
+        android:fillColor="#0A0A0A"
+        android:fillAlpha="0.8"
+        android:pathData="M100,140h312v200h-312z"/>
+
+    <!-- Clapperboard base -->
+    <path
+        android:strokeColor="#D4AF37"
+        android:strokeWidth="5"
+        android:fillColor="#000000"
+        android:pathData="M166,210h180v100h-180z"/>
+
+    <!-- Clapper stick (tilted bar) -->
+    <path
+        android:fillColor="#D4AF37"
+        android:strokeColor="#D4AF37"
+        android:strokeWidth="2"
+        android:pathData="M166,185 L346,205 L346,182 L166,162z"/>
+
+    <!-- Black stripes on clapper -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M184,163.8 L184,186.8 L198,188.3 L198,165.3z"/>
+    <path
+        android:fillColor="#000000"
+        android:pathData="M220,167.7 L220,190.7 L234,192.2 L234,169.2z"/>
+    <path
+        android:fillColor="#000000"
+        android:pathData="M256,171.6 L256,194.6 L270,196.1 L270,173.1z"/>
+    <path
+        android:fillColor="#000000"
+        android:pathData="M292,175.5 L292,198.5 L306,200 L306,177z"/>
+    <path
+        android:fillColor="#000000"
+        android:pathData="M328,179.4 L328,202.4 L342,203.9 L342,180.9z"/>
+
+    <!-- Play button triangle -->
+    <path
+        android:fillColor="#D4AF37"
+        android:pathData="M236,240 L236,280 L280,260z"/>
+
+    <!-- Monitor stand -->
+    <path
+        android:fillColor="#D4AF37"
+        android:pathData="M226,360h60v40h-60z"/>
+    <path
+        android:fillColor="#D4AF37"
+        android:pathData="M176,400h160v12h-160z"/>
+
+    <!-- Power indicator light -->
+    <path
+        android:fillColor="#D4AF37"
+        android:fillAlpha="0.8"
+        android:pathData="M256,350m-6,0a6,6 0,1,1 12,0a6,6 0,1,1 -12,0"/>
+</vector>
