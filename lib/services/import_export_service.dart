@@ -32,11 +32,13 @@ class ExportResult {
 class ImportResult {
   final int moviesImported;
   final int moviesSkipped;
+  final bool settingsImported;
   final String? error;
 
   const ImportResult({
     this.moviesImported = 0,
     this.moviesSkipped = 0,
+    this.settingsImported = false,
     this.error,
   });
 
@@ -125,6 +127,7 @@ class ImportExportService {
   static Future<ImportResult> importData({
     required Future<void> Function(Movie movie) addMovie,
     required Future<bool> Function(String id) movieExists,
+    Future<void> Function(Map<String, dynamic>)? applySettings,
   }) async {
     try {
       // Let user pick a file
@@ -184,9 +187,18 @@ class ImportExportService {
         }
       }
 
+      // Apply settings if present and callback provided
+      bool settingsImported = false;
+      if (applySettings != null &&
+          data['settings'] is Map<String, dynamic>) {
+        await applySettings(data['settings'] as Map<String, dynamic>);
+        settingsImported = true;
+      }
+
       return ImportResult(
         moviesImported: imported,
         moviesSkipped: skipped,
+        settingsImported: settingsImported,
       );
     } catch (e) {
       return ImportResult(error: 'Import failed: $e');

@@ -1,0 +1,212 @@
+{
+  "@@locale": "it",
+
+  "navBrowse": "Esplora",
+  "navCinema": "Cinema",
+  "navLibrary": "Libreria",
+  "navSettings": "Impostazioni",
+
+  "cancel": "Annulla",
+  "close": "Chiudi",
+  "refresh": "Aggiorna",
+  "exportAction": "Esporta",
+  "importAction": "Importa",
+  "clearAll": "Elimina tutto",
+  "selectFile": "Seleziona file",
+  "moreActions": "Altre azioni",
+
+  "searchTmdbHint": "Cerca film su TMDb...",
+  "upcomingMoviesNext2Weeks": "Film in uscita (prossime 2 settimane)",
+  "upcomingMovies": "Film in uscita",
+  "noMoviesFound": "Nessun film trovato",
+  "noUpcomingMovies": "Nessun film in uscita",
+  "tryDifferentSearch": "Prova un termine di ricerca diverso",
+  "checkBackLater": "Ricontrolla più tardi o usa la ricerca",
+  "removeFromWatchlist": "Rimuovi dalla lista",
+  "addToWatchlist": "Aggiungi alla lista",
+  "movieRemovedFromWatchlist": "{title} rimosso dalla lista",
+  "@movieRemovedFromWatchlist": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "movieAddedToWatchlist": "{title} aggiunto alla lista",
+  "@movieAddedToWatchlist": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+
+  "searchCinemaHint": "Cerca film al cinema...",
+  "noCinemaMovies": "Nessun film al cinema",
+  "addMoviesFromBrowse": "Aggiungi film dalla sezione Esplora",
+  "released": "Usciti",
+  "upcomingReleases": "Prossime uscite",
+  "movieMarkedWatched": "{title} segnato come visto",
+  "@movieMarkedWatched": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "movieAddedRewatch": "{title} aggiunto alla lista da rivedere",
+  "@movieAddedRewatch": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "movieMovedStreaming": "{title} spostato alla lista streaming",
+  "@movieMovedStreaming": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "movieDeleted": "{title} eliminato",
+  "@movieDeleted": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "couldNotOpenCineman": "Impossibile aprire Cineman: {error}",
+  "@couldNotOpenCineman": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "searchLibraryHint": "Cerca nella tua libreria...",
+  "watched": "Visti",
+  "streamingWatchlist": "Lista streaming",
+  "noWatchedMovies": "Nessun film visto",
+  "noMoviesToStream": "Nessun film da guardare in streaming",
+  "markMoviesWatched": "Segna i film come visti nella sezione Cinema",
+  "markMoviesForStreaming": "Segna i film come \"Salva per streaming\" o \"Da rivedere\"",
+  "tryDifferentSearchOrFilter": "Prova una ricerca o un filtro diverso",
+  "wantToRewatch": "Da rivedere",
+  "saveForStreaming": "Salva per streaming",
+  "alsoOn": "{title} è anche su",
+  "@alsoOn": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "alsoOnOtherServices": "Anche su altri servizi",
+
+  "sectionDataManagement": "Gestione dati",
+  "sectionAppearance": "Aspetto",
+  "sectionStreamingServices": "Servizi streaming",
+  "sectionNotifications": "Notifiche",
+  "sectionAbout": "Informazioni",
+
+  "automaticUpdates": "Aggiornamenti automatici",
+  "automaticUpdatesSubtitle": "Le date di uscita si aggiornano automaticamente ogni settimana",
+  "refreshFromTmdb": "Aggiorna da TMDb",
+  "refreshFromTmdbDescription": "Aggiorna tutti i film con i dati più recenti di TMDb (date di uscita, disponibilità streaming, ecc.).\nQuesto viene eseguito automaticamente ogni settimana in background.",
+  "exportData": "Esporta dati",
+  "importData": "Importa dati",
+  "exportImportDescription": "Esporta o importa la tua lista e i dati della libreria come file JSON.",
+  "clearAllMovies": "Elimina tutti i film",
+
+  "darkMode": "Modalità scura",
+  "darkThemeEnabled": "Tema scuro attivo",
+  "lightThemeEnabled": "Tema chiaro attivo",
+  "movieTitleLanguage": "Lingua dei titoli",
+  "releaseDateCountry": "Paese di uscita",
+  "displayLanguage": "Lingua di visualizzazione",
+  "displayLanguageAuto": "Auto (lingua del dispositivo)",
+
+  "manageStreamingServices": "Gestisci servizi streaming",
+  "servicesSelected": "{count, plural, =0{Nessun servizio selezionato} =1{1 servizio selezionato} other{{count} servizi selezionati}}",
+  "@servicesSelected": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "enableNotifications": "Abilita notifiche",
+  "masterNotificationToggle": "Interruttore principale notifiche",
+  "sundayBeforeRelease": "Domenica prima dell'uscita",
+  "sundayBeforeReleaseSubtitle": "Ricevi un promemoria la domenica prima dell'uscita",
+  "releaseDayNotification": "Giorno di uscita",
+  "releaseDaySubtitle": "Notificato il giorno dell'uscita di un film",
+  "saturdayAfterRelease": "Sabato dopo l'uscita",
+  "saturdayAfterReleaseSubtitle": "Ricevi un promemoria il sabato dopo l'uscita",
+  "leftCinema": "Lasciato il cinema",
+  "leftCinemaSubtitle": "Notificato quando un film lascia il cinema",
+  "streamingAvailableNotification": "Disponibile in streaming",
+  "streamingAvailableSubtitle": "Notificato quando disponibile sui tuoi servizi streaming",
+
+  "versionLabel": "Versione",
+
+  "selectReleaseDateCountry": "Seleziona paese di uscita",
+  "selectTitleLanguage": "Seleziona lingua dei titoli",
+  "selectDisplayLanguage": "Seleziona lingua di visualizzazione",
+  "releaseCountrySet": "Paese di uscita impostato su {country}. Aggiorna i dati per applicare.",
+  "@releaseCountrySet": {
+    "placeholders": { "country": { "type": "String" } }
+  },
+  "updatingMovieTitles": "Aggiornamento titoli film in {language}...",
+  "@updatingMovieTitles": {
+    "placeholders": { "language": { "type": "String" } }
+  },
+  "updatedMovieTitles": "{count} film aggiornati in {language}",
+  "@updatedMovieTitles": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "language": { "type": "String" }
+    }
+  },
+
+  "refreshFromTmdbTitle": "Aggiornare da TMDb?",
+  "refreshFromTmdbConfirmation": "Tutti i film verranno aggiornati con i dati più recenti di TMDb (date di uscita, disponibilità streaming, poster, ecc.). Potrebbe richiedere un momento.",
+
+  "exportDataTitle": "Esporta dati",
+  "selectWhatToExport": "Seleziona cosa esportare:",
+  "exportWatchlist": "Lista",
+  "exportWatchlistSubtitle": "Film che vuoi vedere (Cinema)",
+  "exportLibrary": "Libreria",
+  "exportLibrarySubtitle": "Visti, da rivedere, streaming",
+  "exportSettingsLabel": "Impostazioni",
+  "exportSettingsSubtitle": "Notifiche, servizi streaming",
+  "dataExportedSuccess": "Dati esportati con successo",
+  "exportFailed": "Esportazione fallita: {error}",
+  "@exportFailed": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "importDataTitle": "Importa dati",
+  "importDataDescription": "Seleziona un file JSON BeStWatchList da importare. I film duplicati verranno saltati.",
+  "importedMovies": "{movies} film importati, {skipped} saltati",
+  "@importedMovies": {
+    "placeholders": {
+      "movies": { "type": "int" },
+      "skipped": { "type": "int" }
+    }
+  },
+  "importedMoviesWithSettings": "{movies} film importati, {skipped} saltati. Impostazioni ripristinate.",
+  "@importedMoviesWithSettings": {
+    "placeholders": {
+      "movies": { "type": "int" },
+      "skipped": { "type": "int" }
+    }
+  },
+
+  "clearAllMoviesTitle": "Eliminare tutti i film?",
+  "clearAllMoviesConfirmation": "Tutti i film verranno eliminati dalla memoria locale. Questa azione non può essere annullata. Sei sicuro?",
+  "allMoviesCleared": "Tutti i film eliminati",
+
+  "streamingServicesTitle": "Servizi streaming",
+  "streamingServicesDescription": "Seleziona i servizi streaming a cui sei abbonato. Ti notificheremo quando i film saranno disponibili sui tuoi servizi.",
+  "searchServicesHint": "Cerca servizi streaming...",
+  "noStreamingProviders": "Nessun provider streaming disponibile",
+  "checkTmdbConfig": "Controlla la configurazione API TMDB.",
+  "noServicesFound": "Nessun servizio trovato",
+  "subscribed": "Abbonato",
+
+  "menuMarkWatched": "Segna come visto",
+  "menuWantToRewatch": "Da rivedere",
+  "menuDelete": "Elimina",
+  "menuRemoveFromLibrary": "Rimuovi dalla libreria",
+  "menuSaveForStreaming": "Aggiungi alla lista streaming",
+  "menuViewShowtimes": "Vedi su Cineman",
+
+  "releaseDateTbd": "Data di uscita: TBD",
+  "releasesInDays": "Esce il {date} (tra {days} giorni)",
+  "@releasesInDays": {
+    "placeholders": {
+      "date": { "type": "String" },
+      "days": { "type": "int" }
+    }
+  },
+  "releasedOnDate": "Uscito il {date}",
+  "@releasedOnDate": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "openTmdb": "Apri TMDb",
+  "openImdb": "Apri IMDb",
+  "couldNotOpenLink": "Impossibile aprire il link",
+
+  "tmdbApiKeyMissing": "Chiave API TMDB non configurata — la ricerca film non è disponibile.",
+  "tmdbApiKeyInvalid": "Chiave API TMDB non valida o scaduta — la ricerca film non è disponibile."
+}

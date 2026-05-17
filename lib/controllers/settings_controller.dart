@@ -57,6 +57,8 @@ class SettingsController extends ChangeNotifier {
   List<String> get streamingServices => _settings?.streamingServices ?? [];
   bool get notificationsEnabled => _settings?.notificationsEnabled ?? true;
   String get titleLanguage => _settings?.titleLanguage ?? 'en';
+  String get releaseCountry => _settings?.releaseDateCountry ?? 'DE';
+  String get appLanguage => _settings?.appLanguage ?? '';
 
   /// Load settings from repository
   Future<void> _loadSettings() async {
@@ -65,8 +67,9 @@ class SettingsController extends ChangeNotifier {
 
     _settings = await _repository.getSettings();
 
-    // Sync title language with TMDB repository
+    // Sync title language and release country with TMDB repository
     _tmdbRepository.setTitleLanguage(_settings?.titleLanguage ?? 'en');
+    _tmdbRepository.setReleaseCountry(_settings?.releaseDateCountry ?? 'DE');
 
     _isLoading = false;
     notifyListeners();
@@ -74,6 +77,14 @@ class SettingsController extends ChangeNotifier {
 
   /// Refresh settings from repository
   Future<void> refreshSettings() async {
+    await _loadSettings();
+  }
+
+  /// Apply imported settings from a map, overwriting current settings
+  Future<void> applyImportedSettings(Map<String, dynamic> map) async {
+    final imported = UserSettings.fromMap(map);
+    imported.markAsModified();
+    await _repository.saveSettings(imported);
     await _loadSettings();
   }
 
@@ -104,6 +115,28 @@ class SettingsController extends ChangeNotifier {
 
     // Sync with TMDB repository
     _tmdbRepository.setTitleLanguage(languageCode);
+
+    notifyListeners();
+  }
+
+  /// Update app display language setting
+  Future<void> updateAppLanguage(String languageCode) async {
+    if (_settings == null) return;
+    _settings!.appLanguage = languageCode;
+    _settings!.markAsModified();
+    await _repository.saveSettings(_settings!);
+    notifyListeners();
+  }
+
+  /// Update release date country setting
+  Future<void> updateReleaseCountry(String countryCode) async {
+    if (_settings == null) return;
+    _settings!.releaseDateCountry = countryCode;
+    _settings!.markAsModified();
+    await _repository.saveSettings(_settings!);
+
+    // Sync with TMDB repository
+    _tmdbRepository.setReleaseCountry(countryCode);
 
     notifyListeners();
   }

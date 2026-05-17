@@ -16,6 +16,7 @@ import 'repositories/tmdb_repository.dart';
 import 'widgets/app_logo_header.dart';
 import 'constants/app_icons.dart';
 import 'constants/app_colors.dart';
+import 'l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -82,12 +83,17 @@ class BeStWatchListApp extends StatelessWidget {
       child: Consumer<SettingsController>(
         builder: (context, settingsController, _) {
           final isDarkMode = settingsController.darkMode;
+          final appLanguage = settingsController.appLanguage;
+          final locale = appLanguage.isEmpty ? null : Locale(appLanguage);
 
           return MaterialApp(
             title: 'BeStWatchList',
             theme: _buildLightTheme(),
             darkTheme: _buildDarkTheme(),
             themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+            locale: locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: const HomeScreen(),
           );
         },
@@ -175,6 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: const AppLogoHeader(),
@@ -189,22 +196,22 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         type: BottomNavigationBarType.fixed,
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(AppIcons.browse),
-            label: 'Browse',
+            icon: const Icon(AppIcons.browse),
+            label: l10n.navBrowse,
           ),
           BottomNavigationBarItem(
-            icon: Icon(AppIcons.cinema),
-            label: 'Cinema',
+            icon: const Icon(AppIcons.cinema),
+            label: l10n.navCinema,
           ),
           BottomNavigationBarItem(
-            icon: Icon(AppIcons.library),
-            label: 'Library',
+            icon: const Icon(AppIcons.library),
+            label: l10n.navLibrary,
           ),
           BottomNavigationBarItem(
-            icon: Icon(AppIcons.settings),
-            label: 'Settings',
+            icon: const Icon(AppIcons.settings),
+            label: l10n.navSettings,
           ),
         ],
       ),

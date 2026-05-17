@@ -1,0 +1,212 @@
+{
+  "@@locale": "de",
+
+  "navBrowse": "Suchen",
+  "navCinema": "Kino",
+  "navLibrary": "Bibliothek",
+  "navSettings": "Einstellungen",
+
+  "cancel": "Abbrechen",
+  "close": "Schließen",
+  "refresh": "Aktualisieren",
+  "exportAction": "Exportieren",
+  "importAction": "Importieren",
+  "clearAll": "Alle löschen",
+  "selectFile": "Datei auswählen",
+  "moreActions": "Weitere Aktionen",
+
+  "searchTmdbHint": "Filme auf TMDb suchen...",
+  "upcomingMoviesNext2Weeks": "Kommende Filme (Nächste 2 Wochen)",
+  "upcomingMovies": "Kommende Filme",
+  "noMoviesFound": "Keine Filme gefunden",
+  "noUpcomingMovies": "Keine kommenden Filme",
+  "tryDifferentSearch": "Versuche einen anderen Suchbegriff",
+  "checkBackLater": "Schau später nochmal oder nutze die Suche",
+  "removeFromWatchlist": "Von Merkliste entfernen",
+  "addToWatchlist": "Zur Merkliste hinzufügen",
+  "movieRemovedFromWatchlist": "{title} von der Merkliste entfernt",
+  "@movieRemovedFromWatchlist": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "movieAddedToWatchlist": "{title} zur Merkliste hinzugefügt",
+  "@movieAddedToWatchlist": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+
+  "searchCinemaHint": "Kinofilme suchen...",
+  "noCinemaMovies": "Noch keine Kinofilme",
+  "addMoviesFromBrowse": "Füge Filme aus der Suche zur Merkliste hinzu",
+  "released": "Erschienen",
+  "upcomingReleases": "Kommende Veröffentlichungen",
+  "movieMarkedWatched": "{title} als gesehen markiert",
+  "@movieMarkedWatched": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "movieAddedRewatch": "{title} zur Wiederholungsliste hinzugefügt",
+  "@movieAddedRewatch": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "movieMovedStreaming": "{title} zur Streaming-Liste verschoben",
+  "@movieMovedStreaming": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "movieDeleted": "{title} gelöscht",
+  "@movieDeleted": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "couldNotOpenCineman": "Cineman konnte nicht geöffnet werden: {error}",
+  "@couldNotOpenCineman": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "searchLibraryHint": "Bibliothek durchsuchen...",
+  "watched": "Gesehen",
+  "streamingWatchlist": "Streaming-Merkliste",
+  "noWatchedMovies": "Noch keine gesehenen Filme",
+  "noMoviesToStream": "Keine Filme zum Streamen",
+  "markMoviesWatched": "Markiere Filme als gesehen im Kino-Tab",
+  "markMoviesForStreaming": "Markiere Filme als \"Für Streaming speichern\" oder \"Nochmal ansehen\"",
+  "tryDifferentSearchOrFilter": "Versuche einen anderen Such- oder Filterbegriff",
+  "wantToRewatch": "Nochmal ansehen",
+  "saveForStreaming": "Für Streaming speichern",
+  "alsoOn": "{title} ist auch auf",
+  "@alsoOn": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "alsoOnOtherServices": "Auch auf anderen Diensten",
+
+  "sectionDataManagement": "Datenverwaltung",
+  "sectionAppearance": "Erscheinungsbild",
+  "sectionStreamingServices": "Streaming-Dienste",
+  "sectionNotifications": "Benachrichtigungen",
+  "sectionAbout": "Über",
+
+  "automaticUpdates": "Automatische Aktualisierungen",
+  "automaticUpdatesSubtitle": "Erscheinungsdaten werden automatisch jede Woche aktualisiert",
+  "refreshFromTmdb": "Daten von TMDb aktualisieren",
+  "refreshFromTmdbDescription": "Aktualisiert alle Filme mit den neuesten Daten von TMDb (Erscheinungsdaten, Streaming-Verfügbarkeit, etc.).\nDies wird automatisch jede Woche im Hintergrund ausgeführt.",
+  "exportData": "Daten exportieren",
+  "importData": "Daten importieren",
+  "exportImportDescription": "Exportiere oder importiere deine Merklisten- und Bibliotheksdaten als JSON-Dateien.",
+  "clearAllMovies": "Alle Filme löschen",
+
+  "darkMode": "Dunkelmodus",
+  "darkThemeEnabled": "Dunkles Design aktiviert",
+  "lightThemeEnabled": "Helles Design aktiviert",
+  "movieTitleLanguage": "Filmtitel-Sprache",
+  "releaseDateCountry": "Erscheinungsland",
+  "displayLanguage": "Anzeigesprache",
+  "displayLanguageAuto": "Auto (Gerätesprache)",
+
+  "manageStreamingServices": "Streaming-Dienste verwalten",
+  "servicesSelected": "{count, plural, =0{Keine Dienste ausgewählt} =1{1 Dienst ausgewählt} other{{count} Dienste ausgewählt}}",
+  "@servicesSelected": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "enableNotifications": "Benachrichtigungen aktivieren",
+  "masterNotificationToggle": "Haupt-Benachrichtigungsschalter",
+  "sundayBeforeRelease": "Sonntag vor Veröffentlichung",
+  "sundayBeforeReleaseSubtitle": "Werde am Sonntag vor dem Erscheinungsdatum erinnert",
+  "releaseDayNotification": "Erscheinungstag",
+  "releaseDaySubtitle": "Werde benachrichtigt, wenn ein Film erscheint",
+  "saturdayAfterRelease": "Samstag nach Veröffentlichung",
+  "saturdayAfterReleaseSubtitle": "Werde am Samstag nach dem Erscheinungsdatum erinnert",
+  "leftCinema": "Kino verlassen",
+  "leftCinemaSubtitle": "Werde benachrichtigt, wenn ein Film das Kino verlässt",
+  "streamingAvailableNotification": "Streaming verfügbar",
+  "streamingAvailableSubtitle": "Werde benachrichtigt, wenn ein Film auf deinen Streaming-Diensten verfügbar ist",
+
+  "versionLabel": "Version",
+
+  "selectReleaseDateCountry": "Erscheinungsland auswählen",
+  "selectTitleLanguage": "Filmtitel-Sprache auswählen",
+  "selectDisplayLanguage": "Anzeigesprache auswählen",
+  "releaseCountrySet": "Erscheinungsland auf {country} gesetzt. Daten aktualisieren, um anzuwenden.",
+  "@releaseCountrySet": {
+    "placeholders": { "country": { "type": "String" } }
+  },
+  "updatingMovieTitles": "Filmtitel werden auf {language} aktualisiert...",
+  "@updatingMovieTitles": {
+    "placeholders": { "language": { "type": "String" } }
+  },
+  "updatedMovieTitles": "{count} Film(e) auf {language} aktualisiert",
+  "@updatedMovieTitles": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "language": { "type": "String" }
+    }
+  },
+
+  "refreshFromTmdbTitle": "Daten von TMDb aktualisieren?",
+  "refreshFromTmdbConfirmation": "Alle Filme werden mit den neuesten Daten von TMDb aktualisiert (Erscheinungsdaten, Streaming-Verfügbarkeit, Poster, etc.). Dies kann einen Moment dauern.",
+
+  "exportDataTitle": "Daten exportieren",
+  "selectWhatToExport": "Wähle aus, was exportiert werden soll:",
+  "exportWatchlist": "Merkliste",
+  "exportWatchlistSubtitle": "Filme, die du sehen möchtest (Kino)",
+  "exportLibrary": "Bibliothek",
+  "exportLibrarySubtitle": "Gesehen, Wiederholen, Streaming",
+  "exportSettingsLabel": "Einstellungen",
+  "exportSettingsSubtitle": "Benachrichtigungen, Streaming-Dienste",
+  "dataExportedSuccess": "Daten erfolgreich exportiert",
+  "exportFailed": "Export fehlgeschlagen: {error}",
+  "@exportFailed": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "importDataTitle": "Daten importieren",
+  "importDataDescription": "Wähle eine BeStWatchList-JSON-Datei zum Importieren aus. Doppelte Filme werden übersprungen.",
+  "importedMovies": "{movies} Film(e) importiert, {skipped} übersprungen",
+  "@importedMovies": {
+    "placeholders": {
+      "movies": { "type": "int" },
+      "skipped": { "type": "int" }
+    }
+  },
+  "importedMoviesWithSettings": "{movies} Film(e) importiert, {skipped} übersprungen. Einstellungen wiederhergestellt.",
+  "@importedMoviesWithSettings": {
+    "placeholders": {
+      "movies": { "type": "int" },
+      "skipped": { "type": "int" }
+    }
+  },
+
+  "clearAllMoviesTitle": "Alle Filme löschen?",
+  "clearAllMoviesConfirmation": "Alle Filme werden aus dem lokalen Speicher gelöscht. Diese Aktion kann nicht rückgängig gemacht werden. Bist du sicher?",
+  "allMoviesCleared": "Alle Filme gelöscht",
+
+  "streamingServicesTitle": "Streaming-Dienste",
+  "streamingServicesDescription": "Wähle die Streaming-Dienste aus, die du abonniert hast. Wir benachrichtigen dich, wenn Filme auf deinen Diensten verfügbar werden.",
+  "searchServicesHint": "Streaming-Dienste suchen...",
+  "noStreamingProviders": "Keine Streaming-Anbieter verfügbar",
+  "checkTmdbConfig": "Bitte überprüfe deine TMDB-API-Konfiguration.",
+  "noServicesFound": "Keine Dienste gefunden",
+  "subscribed": "Abonniert",
+
+  "menuMarkWatched": "Als gesehen markieren",
+  "menuWantToRewatch": "Nochmal ansehen",
+  "menuDelete": "Löschen",
+  "menuRemoveFromLibrary": "Aus Bibliothek entfernen",
+  "menuSaveForStreaming": "Zur Streaming-Merkliste hinzufügen",
+  "menuViewShowtimes": "Auf Cineman ansehen",
+
+  "releaseDateTbd": "Erscheinungsdatum: TBD",
+  "releasesInDays": "Erscheint {date} (in {days} Tagen)",
+  "@releasesInDays": {
+    "placeholders": {
+      "date": { "type": "String" },
+      "days": { "type": "int" }
+    }
+  },
+  "releasedOnDate": "Erschienen am {date}",
+  "@releasedOnDate": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "openTmdb": "TMDb öffnen",
+  "openImdb": "IMDb öffnen",
+  "couldNotOpenLink": "Link konnte nicht geöffnet werden",
+
+  "tmdbApiKeyMissing": "TMDB-API-Schlüssel nicht konfiguriert — Film-Suche nicht verfügbar.",
+  "tmdbApiKeyInvalid": "TMDB-API-Schlüssel ungültig oder abgelaufen — Film-Suche nicht verfügbar."
+}

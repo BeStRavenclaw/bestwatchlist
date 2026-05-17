@@ -28,13 +28,15 @@ class UserSettingsAdapter extends TypeAdapter<UserSettings> {
       lastModified: fields[9] as DateTime?,
       needsSync: fields[10] as bool,
       titleLanguage: (fields[11] as String?) ?? 'en',
+      releaseDateCountry: (fields[12] as String?) ?? 'DE',
+      appLanguage: (fields[13] as String?) ?? '',
     );
   }
 
   @override
   void write(BinaryWriter writer, UserSettings obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(13)
       ..writeByte(1)
       ..write(obj.streamingServices)
       ..writeByte(2)
@@ -56,7 +58,11 @@ class UserSettingsAdapter extends TypeAdapter<UserSettings> {
       ..writeByte(10)
       ..write(obj.needsSync)
       ..writeByte(11)
-      ..write(obj.titleLanguage);
+      ..write(obj.titleLanguage)
+      ..writeByte(12)
+      ..write(obj.releaseDateCountry)
+      ..writeByte(13)
+      ..write(obj.appLanguage);
   }
 
   @override

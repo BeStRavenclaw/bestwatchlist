@@ -53,6 +53,8 @@ abstract class AppIcons {
   static const IconData darkMode = Icons.dark_mode;
   static const IconData lightMode = Icons.light_mode;
   static const IconData translate = Icons.translate;
+  static const IconData language = Icons.language;
+  static const IconData location = Icons.public;
   static const IconData chevronRight = Icons.chevron_right;
   static const IconData subscriptions = Icons.subscriptions;
   static const IconData notifications = Icons.notifications;

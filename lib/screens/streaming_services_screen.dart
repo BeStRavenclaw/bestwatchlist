@@ -5,6 +5,7 @@ import '../repositories/tmdb_repository.dart';
 import '../constants/app_icons.dart';
 import '../constants/app_colors.dart';
 import '../widgets/action_buttons.dart';
+import '../l10n/app_localizations.dart';
 
 /// Screen for managing user's streaming service subscriptions
 class StreamingServicesScreen extends StatefulWidget {
@@ -35,7 +36,6 @@ class _StreamingServicesScreenState extends State<StreamingServicesScreen> {
     super.dispose();
   }
 
-  /// Load available streaming providers from TMDb
   Future<void> _loadAvailableProviders() async {
     final providers =
         await _tmdbRepository.getAllAvailableProvidersForSwitzerland();
@@ -46,7 +46,6 @@ class _StreamingServicesScreenState extends State<StreamingServicesScreen> {
     });
   }
 
-  /// Filter services based on search query
   void _filterServices() {
     final query = _searchController.text.toLowerCase();
     setState(() {
@@ -62,9 +61,10 @@ class _StreamingServicesScreenState extends State<StreamingServicesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Streaming Services'),
+        title: Text(l10n.streamingServicesTitle),
         backgroundColor: AppColors.gold,
         foregroundColor: AppColors.black,
       ),
@@ -75,7 +75,7 @@ class _StreamingServicesScreenState extends State<StreamingServicesScreen> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'Select the streaming services you subscribe to. We\'ll notify you when movies become available on your services.',
+                  l10n.streamingServicesDescription,
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.grey[600],
@@ -89,7 +89,7 @@ class _StreamingServicesScreenState extends State<StreamingServicesScreen> {
                 child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                    hintText: 'Search streaming services...',
+                    hintText: l10n.searchServicesHint,
                     prefixIcon: const Icon(AppIcons.search),
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
@@ -108,7 +108,7 @@ class _StreamingServicesScreenState extends State<StreamingServicesScreen> {
               ),
               const Divider(),
               Expanded(
-                child: _buildStreamingServicesList(settingsController),
+                child: _buildStreamingServicesList(settingsController, l10n),
               ),
             ],
           );
@@ -117,8 +117,8 @@ class _StreamingServicesScreenState extends State<StreamingServicesScreen> {
     );
   }
 
-  /// Build the list of streaming services
-  Widget _buildStreamingServicesList(SettingsController settingsController) {
+  Widget _buildStreamingServicesList(
+      SettingsController settingsController, AppLocalizations l10n) {
     final selectedServices = settingsController.streamingServices;
 
     if (_isLoadingProviders) {
@@ -142,16 +142,16 @@ class _StreamingServicesScreenState extends State<StreamingServicesScreen> {
                 color: Colors.grey[400],
               ),
               const SizedBox(height: 16),
-              const Text(
-                'No streaming providers available',
-                style: TextStyle(
+              Text(
+                l10n.noStreamingProviders,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                'Please check your TMDB API configuration.',
+                l10n.checkTmdbConfig,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.grey[600],
@@ -166,8 +166,8 @@ class _StreamingServicesScreenState extends State<StreamingServicesScreen> {
     if (filteredStreamingServices.isEmpty) {
       return EmptyStateWidget(
         icon: AppIcons.searchOff,
-        title: 'No services found',
-        subtitle: 'Try a different search term',
+        title: l10n.noServicesFound,
+        subtitle: l10n.tryDifferentSearch,
       );
     }
 
@@ -179,7 +179,7 @@ class _StreamingServicesScreenState extends State<StreamingServicesScreen> {
 
         return CheckboxListTile(
           title: Text(service),
-          subtitle: isSelected ? const Text('Subscribed') : null,
+          subtitle: isSelected ? Text(l10n.subscribed) : null,
           value: isSelected,
           activeColor: AppColors.gold,
           onChanged: (bool? value) {

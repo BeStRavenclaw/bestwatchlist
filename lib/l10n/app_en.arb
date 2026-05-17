@@ -1,0 +1,212 @@
+{
+  "@@locale": "en",
+
+  "navBrowse": "Browse",
+  "navCinema": "Cinema",
+  "navLibrary": "Library",
+  "navSettings": "Settings",
+
+  "cancel": "Cancel",
+  "close": "Close",
+  "refresh": "Refresh",
+  "exportAction": "Export",
+  "importAction": "Import",
+  "clearAll": "Clear All",
+  "selectFile": "Select File",
+  "moreActions": "More actions",
+
+  "searchTmdbHint": "Search movies on TMDb...",
+  "upcomingMoviesNext2Weeks": "Upcoming Movies (Next 2 Weeks)",
+  "upcomingMovies": "Upcoming Movies",
+  "noMoviesFound": "No movies found",
+  "noUpcomingMovies": "No upcoming movies",
+  "tryDifferentSearch": "Try a different search term",
+  "checkBackLater": "Check back later or use search to find movies",
+  "removeFromWatchlist": "Remove from watchlist",
+  "addToWatchlist": "Add to watchlist",
+  "movieRemovedFromWatchlist": "{title} removed from watchlist",
+  "@movieRemovedFromWatchlist": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "movieAddedToWatchlist": "{title} added to watchlist",
+  "@movieAddedToWatchlist": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+
+  "searchCinemaHint": "Search cinema movies...",
+  "noCinemaMovies": "No cinema movies yet",
+  "addMoviesFromBrowse": "Add movies to your watchlist from Browse",
+  "released": "Released",
+  "upcomingReleases": "Upcoming Releases",
+  "movieMarkedWatched": "{title} marked as watched",
+  "@movieMarkedWatched": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "movieAddedRewatch": "{title} added to rewatch list",
+  "@movieAddedRewatch": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "movieMovedStreaming": "{title} moved to streaming list",
+  "@movieMovedStreaming": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "movieDeleted": "{title} deleted",
+  "@movieDeleted": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "couldNotOpenCineman": "Could not open Cineman: {error}",
+  "@couldNotOpenCineman": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "searchLibraryHint": "Search your library...",
+  "watched": "Watched",
+  "streamingWatchlist": "Streaming WatchList",
+  "noWatchedMovies": "No watched movies yet",
+  "noMoviesToStream": "No movies to stream",
+  "markMoviesWatched": "Mark movies as watched from Cinema",
+  "markMoviesForStreaming": "Mark movies as \"Save for Streaming\" or \"Want to Rewatch\"",
+  "tryDifferentSearchOrFilter": "Try a different search or filter",
+  "wantToRewatch": "Want to Rewatch",
+  "saveForStreaming": "Save for Streaming",
+  "alsoOn": "{title} is also on",
+  "@alsoOn": {
+    "placeholders": { "title": { "type": "String" } }
+  },
+  "alsoOnOtherServices": "Also on other services",
+
+  "sectionDataManagement": "Data Management",
+  "sectionAppearance": "Appearance",
+  "sectionStreamingServices": "Streaming Services",
+  "sectionNotifications": "Notifications",
+  "sectionAbout": "About",
+
+  "automaticUpdates": "Automatic Updates",
+  "automaticUpdatesSubtitle": "Release dates update automatically every week",
+  "refreshFromTmdb": "Refresh Data from TMDb",
+  "refreshFromTmdbDescription": "Updates all movies with latest data from TMDb (release dates, streaming availability, etc.).\nThis runs automatically every week in the background.",
+  "exportData": "Export Data",
+  "importData": "Import Data",
+  "exportImportDescription": "Export or import your watchlist and library data as JSON files.",
+  "clearAllMovies": "Clear All Movies",
+
+  "darkMode": "Dark Mode",
+  "darkThemeEnabled": "Dark theme enabled",
+  "lightThemeEnabled": "Light theme enabled",
+  "movieTitleLanguage": "Movie Title Language",
+  "releaseDateCountry": "Release Date Country",
+  "displayLanguage": "Display Language",
+  "displayLanguageAuto": "Auto (device language)",
+
+  "manageStreamingServices": "Manage Streaming Services",
+  "servicesSelected": "{count, plural, =0{No services selected} =1{1 service selected} other{{count} services selected}}",
+  "@servicesSelected": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "enableNotifications": "Enable Notifications",
+  "masterNotificationToggle": "Master notification toggle",
+  "sundayBeforeRelease": "Sunday Before Release",
+  "sundayBeforeReleaseSubtitle": "Get reminded the Sunday before a movie releases",
+  "releaseDayNotification": "Release Day",
+  "releaseDaySubtitle": "Get notified when a movie releases",
+  "saturdayAfterRelease": "Saturday After Release",
+  "saturdayAfterReleaseSubtitle": "Get reminded the Saturday after release",
+  "leftCinema": "Left Cinema",
+  "leftCinemaSubtitle": "Get notified when a movie leaves cinema",
+  "streamingAvailableNotification": "Streaming Available",
+  "streamingAvailableSubtitle": "Get notified when available on your streaming services",
+
+  "versionLabel": "Version",
+
+  "selectReleaseDateCountry": "Select Release Date Country",
+  "selectTitleLanguage": "Select Title Language",
+  "selectDisplayLanguage": "Select Display Language",
+  "releaseCountrySet": "Release country set to {country}. Refresh data to apply.",
+  "@releaseCountrySet": {
+    "placeholders": { "country": { "type": "String" } }
+  },
+  "updatingMovieTitles": "Updating movie titles to {language}...",
+  "@updatingMovieTitles": {
+    "placeholders": { "language": { "type": "String" } }
+  },
+  "updatedMovieTitles": "Updated {count} movie(s) to {language}",
+  "@updatedMovieTitles": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "language": { "type": "String" }
+    }
+  },
+
+  "refreshFromTmdbTitle": "Refresh Data from TMDb?",
+  "refreshFromTmdbConfirmation": "This will update all movies with the latest data from TMDb (release dates, streaming availability, posters, etc.). This may take a moment.",
+
+  "exportDataTitle": "Export Data",
+  "selectWhatToExport": "Select what to export:",
+  "exportWatchlist": "Watchlist",
+  "exportWatchlistSubtitle": "Movies you want to watch (Cinema)",
+  "exportLibrary": "Library",
+  "exportLibrarySubtitle": "Watched, rewatch, streaming",
+  "exportSettingsLabel": "Settings",
+  "exportSettingsSubtitle": "Notifications, streaming services",
+  "dataExportedSuccess": "Data exported successfully",
+  "exportFailed": "Export failed: {error}",
+  "@exportFailed": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+
+  "importDataTitle": "Import Data",
+  "importDataDescription": "Select a BeStWatchList JSON file to import. Duplicate movies will be skipped.",
+  "importedMovies": "Imported {movies} movie(s), {skipped} skipped",
+  "@importedMovies": {
+    "placeholders": {
+      "movies": { "type": "int" },
+      "skipped": { "type": "int" }
+    }
+  },
+  "importedMoviesWithSettings": "Imported {movies} movie(s), {skipped} skipped. Settings restored.",
+  "@importedMoviesWithSettings": {
+    "placeholders": {
+      "movies": { "type": "int" },
+      "skipped": { "type": "int" }
+    }
+  },
+
+  "clearAllMoviesTitle": "Clear All Movies?",
+  "clearAllMoviesConfirmation": "This will delete all your movies from local storage. This action cannot be undone. Are you sure?",
+  "allMoviesCleared": "All movies cleared",
+
+  "streamingServicesTitle": "Streaming Services",
+  "streamingServicesDescription": "Select the streaming services you subscribe to. We'll notify you when movies become available on your services.",
+  "searchServicesHint": "Search streaming services...",
+  "noStreamingProviders": "No streaming providers available",
+  "checkTmdbConfig": "Please check your TMDB API configuration.",
+  "noServicesFound": "No services found",
+  "subscribed": "Subscribed",
+
+  "menuMarkWatched": "Mark as Watched",
+  "menuWantToRewatch": "Want to Rewatch",
+  "menuDelete": "Delete",
+  "menuRemoveFromLibrary": "Remove from Library",
+  "menuSaveForStreaming": "Add to Streaming WatchList",
+  "menuViewShowtimes": "View on Cineman",
+
+  "releaseDateTbd": "Release Date: TBD",
+  "releasesInDays": "Releases {date} (in {days} days)",
+  "@releasesInDays": {
+    "placeholders": {
+      "date": { "type": "String" },
+      "days": { "type": "int" }
+    }
+  },
+  "releasedOnDate": "Released {date}",
+  "@releasedOnDate": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "openTmdb": "Open TMDb",
+  "openImdb": "Open IMDb",
+  "couldNotOpenLink": "Could not open link",
+
+  "tmdbApiKeyMissing": "TMDB API key not configured — movie browsing is unavailable.",
+  "tmdbApiKeyInvalid": "TMDB API key is invalid or expired — movie browsing is unavailable."
+}

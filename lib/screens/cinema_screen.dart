@@ -6,8 +6,8 @@ import '../views/widgets/movie_card.dart';
 import '../widgets/showtime_dialog.dart';
 import '../constants/app_icons.dart';
 import '../constants/app_colors.dart';
-import '../constants/menu_items.dart';
 import '../widgets/action_buttons.dart';
+import '../l10n/app_localizations.dart';
 
 /// Cinema screen showing movies on the watchlist (want to watch status)
 class CinemaScreen extends StatefulWidget {
@@ -29,9 +29,10 @@ class _CinemaScreenState extends State<CinemaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
-        _buildSearchBar(),
+        _buildSearchBar(l10n),
         Expanded(
           child: Consumer<MovieController>(
             builder: (context, movieController, _) {
@@ -39,7 +40,6 @@ class _CinemaScreenState extends State<CinemaScreen> {
                   .where((movie) => movie.status == WatchStatus.wantToWatch)
                   .toList();
 
-              // Apply search filter
               if (_searchQuery.isNotEmpty) {
                 watchlistMovies = watchlistMovies.where((movie) {
                   return movie.title
@@ -52,11 +52,9 @@ class _CinemaScreenState extends State<CinemaScreen> {
                 }).toList();
               }
 
-              // Sort by release date
               watchlistMovies
                   .sort((a, b) => a.releaseDate.compareTo(b.releaseDate));
 
-              // Split into released and upcoming
               final released =
                   watchlistMovies.where((m) => m.hasBeenReleased).toList();
               final upcoming =
@@ -66,26 +64,26 @@ class _CinemaScreenState extends State<CinemaScreen> {
                 return EmptyStateWidget(
                   icon: AppIcons.bookmarkOutline,
                   title: _searchQuery.isEmpty
-                      ? 'No cinema movies yet'
-                      : 'No movies found',
+                      ? l10n.noCinemaMovies
+                      : l10n.noMoviesFound,
                   subtitle: _searchQuery.isEmpty
-                      ? 'Add movies to your watchlist from Browse'
-                      : 'Try a different search term',
+                      ? l10n.addMoviesFromBrowse
+                      : l10n.tryDifferentSearch,
                 );
               }
 
               return ListView(
                 children: [
                   if (released.isNotEmpty) ...[
-                    _buildSectionHeader('Released'),
+                    _buildSectionHeader(l10n.released),
                     ...released.map((movie) =>
-                        _buildCinemaMovieCard(context, movieController, movie)),
+                        _buildCinemaMovieCard(context, movieController, movie, l10n)),
                     const Divider(height: 32, thickness: 2),
                   ],
                   if (upcoming.isNotEmpty) ...[
-                    _buildSectionHeader('Upcoming Releases'),
+                    _buildSectionHeader(l10n.upcomingReleases),
                     ...upcoming.map((movie) =>
-                        _buildCinemaMovieCard(context, movieController, movie)),
+                        _buildCinemaMovieCard(context, movieController, movie, l10n)),
                   ],
                 ],
               );
@@ -96,8 +94,7 @@ class _CinemaScreenState extends State<CinemaScreen> {
     );
   }
 
-  /// Build the search bar widget
-  Widget _buildSearchBar() {
+  Widget _buildSearchBar(AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -113,7 +110,7 @@ class _CinemaScreenState extends State<CinemaScreen> {
       child: TextField(
         controller: _searchController,
         decoration: InputDecoration(
-          hintText: 'Search cinema movies...',
+          hintText: l10n.searchCinemaHint,
           prefixIcon: const Icon(AppIcons.search),
           suffixIcon: _searchQuery.isNotEmpty
               ? IconButton(
@@ -142,7 +139,6 @@ class _CinemaScreenState extends State<CinemaScreen> {
     );
   }
 
-  /// Build section header with title and count
   Widget _buildSectionHeader(String title) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
@@ -157,9 +153,11 @@ class _CinemaScreenState extends State<CinemaScreen> {
     );
   }
 
-  /// Build a movie card for cinema screen
   Widget _buildCinemaMovieCard(
-      BuildContext context, MovieController movieController, Movie movie) {
+      BuildContext context,
+      MovieController movieController,
+      Movie movie,
+      AppLocalizations l10n) {
     return MovieCard(
       movie: movie,
       showDescription: false,
@@ -169,7 +167,7 @@ class _CinemaScreenState extends State<CinemaScreen> {
         } catch (e) {
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Could not open Cineman: $e')),
+              SnackBar(content: Text(l10n.couldNotOpenCineman(e.toString()))),
             );
           }
         }
@@ -179,14 +177,35 @@ class _CinemaScreenState extends State<CinemaScreen> {
         children: [
           MovieInfoButton(movie: movie),
           ActionPopupMenu(
+            tooltip: l10n.moreActions,
             onSelected: (value) =>
-                _handleMenuAction(context, movieController, movie, value),
+                _handleMenuAction(context, movieController, movie, value, l10n),
             items: [
-              ActionMenuItem.fromData(AppMenuItems.showtimes),
-              ActionMenuItem.fromData(AppMenuItems.markWatchedOutline),
-              ActionMenuItem.fromData(AppMenuItems.rewatchCapitalized),
-              ActionMenuItem.fromData(AppMenuItems.saveForStreaming),
-              ActionMenuItem.fromData(AppMenuItems.delete),
+              ActionMenuItem(
+                value: 'showtimes',
+                icon: AppIcons.showtimes,
+                label: l10n.menuViewShowtimes,
+              ),
+              ActionMenuItem(
+                value: 'watched',
+                icon: AppIcons.markWatchedOutline,
+                label: l10n.menuMarkWatched,
+              ),
+              ActionMenuItem(
+                value: 'rewatch',
+                icon: AppIcons.rewatch,
+                label: l10n.menuWantToRewatch,
+              ),
+              ActionMenuItem(
+                value: 'save_for_streaming',
+                icon: AppIcons.saveForStreaming,
+                label: l10n.menuSaveForStreaming,
+              ),
+              ActionMenuItem(
+                value: 'delete',
+                icon: AppIcons.delete,
+                label: l10n.menuDelete,
+              ),
             ],
           ),
         ],
@@ -194,12 +213,12 @@ class _CinemaScreenState extends State<CinemaScreen> {
     );
   }
 
-  /// Handle popup menu action
   Future<void> _handleMenuAction(
     BuildContext context,
     MovieController movieController,
     Movie movie,
     String action,
+    AppLocalizations l10n,
   ) async {
     switch (action) {
       case 'showtimes':
@@ -208,7 +227,7 @@ class _CinemaScreenState extends State<CinemaScreen> {
         } catch (e) {
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Could not open Cineman: $e')),
+              SnackBar(content: Text(l10n.couldNotOpenCineman(e.toString()))),
             );
           }
         }
@@ -217,7 +236,7 @@ class _CinemaScreenState extends State<CinemaScreen> {
         await movieController.markAsWatched(movie);
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('${movie.title} marked as watched')),
+            SnackBar(content: Text(l10n.movieMarkedWatched(movie.title))),
           );
         }
         break;
@@ -225,7 +244,7 @@ class _CinemaScreenState extends State<CinemaScreen> {
         await movieController.markAsWantToRewatch(movie);
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('${movie.title} added to rewatch list')),
+            SnackBar(content: Text(l10n.movieAddedRewatch(movie.title))),
           );
         }
         break;
@@ -233,7 +252,7 @@ class _CinemaScreenState extends State<CinemaScreen> {
         await movieController.markAsSaveForStreaming(movie);
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('${movie.title} moved to streaming list')),
+            SnackBar(content: Text(l10n.movieMovedStreaming(movie.title))),
           );
         }
         break;
@@ -241,7 +260,7 @@ class _CinemaScreenState extends State<CinemaScreen> {
         await movieController.deleteMovie(movie);
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('${movie.title} deleted')),
+            SnackBar(content: Text(l10n.movieDeleted(movie.title))),
           );
         }
         break;

@@ -3,19 +3,36 @@ import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
 import '../models/movie.dart';
 
+enum TmdbApiStatus { ok, notConfigured, unauthorized }
+
 /// Repository for fetching movie data from The Movie Database (TMDb) API
 class TMDbRepository {
   /// API key injected at build time via --dart-define=TMDB_API_KEY=...
   static const String _apiKey = String.fromEnvironment('TMDB_API_KEY');
+
+  TmdbApiStatus _apiStatus = _apiKey.isEmpty
+      ? TmdbApiStatus.notConfigured
+      : TmdbApiStatus.ok;
+
+  TmdbApiStatus get apiStatus => _apiStatus;
+
   static const String _baseUrl = 'https://api.themoviedb.org/3';
   static const String _imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
 
   /// Language code for movie titles (e.g., 'en', 'de', 'fr')
   String _titleLanguage = 'en';
 
+  /// ISO 3166-1 country code used for theatrical release dates (e.g., 'DE', 'CH', 'US')
+  String _releaseCountry = 'DE';
+
   /// Set the language for movie titles
   void setTitleLanguage(String languageCode) {
     _titleLanguage = languageCode;
+  }
+
+  /// Set the country for release date lookups
+  void setReleaseCountry(String countryCode) {
+    _releaseCountry = countryCode;
   }
 
   /// Get the TMDB language parameter (e.g., 'en-US', 'de-DE')
@@ -51,24 +68,24 @@ class TMDbRepository {
     return _fetchMovies('/movie/popular', {'page': page.toString()});
   }
 
-  /// Get now playing movies (German region)
+  /// Get now playing movies (configured release country region)
   Future<List<Movie>> getNowPlaying({int page = 1}) async {
     return _fetchMovies('/movie/now_playing', {
       'page': page.toString(),
-      'region': 'DE',
+      'region': _releaseCountry,
     });
   }
 
-  /// Get upcoming movies (not yet released in German cinemas)
+  /// Get upcoming movies (not yet released in configured release country)
   Future<List<Movie>> getUpcoming({int page = 1}) async {
     final today = DateTime.now().toIso8601String().split('T').first;
 
     return _fetchMovies('/discover/movie', {
       'page': page.toString(),
-      'region': 'DE',
+      'region': _releaseCountry,
       'sort_by': 'release_date.asc',
       'with_release_type': '2|3', // Theatrical (limited) and Theatrical
-      'release_date.gte': today, // Only movies not yet released in DE region
+      'release_date.gte': today,
     });
   }
 
@@ -82,8 +99,12 @@ class TMDbRepository {
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
+        _apiStatus = TmdbApiStatus.ok;
         final data = json.decode(response.body);
         return _parseMovie(data);
+      }
+      if (response.statusCode == 401) {
+        _apiStatus = TmdbApiStatus.unauthorized;
       }
       return null;
     } catch (e) {
@@ -92,8 +113,8 @@ class TMDbRepository {
     }
   }
 
-  /// Get German theatrical release date for a movie (DACH region)
-  Future<DateTime?> getGermanTheatricalReleaseDate(int tmdbId) async {
+  /// Get theatrical release date for a movie in the configured release country
+  Future<DateTime?> getTheatricalReleaseDate(int tmdbId) async {
     if (!isConfigured) return null;
 
     final url = Uri.parse(
@@ -106,14 +127,13 @@ class TMDbRepository {
         final data = json.decode(response.body);
         final results = data['results'] as List;
 
-        // Find German releases
-        final germanReleases = results.firstWhere(
-          (result) => result['iso_3166_1'] == 'DE',
+        final countryReleases = results.firstWhere(
+          (result) => result['iso_3166_1'] == _releaseCountry,
           orElse: () => null,
         );
 
-        if (germanReleases != null) {
-          final releaseDates = germanReleases['release_dates'] as List;
+        if (countryReleases != null) {
+          final releaseDates = countryReleases['release_dates'] as List;
 
           // Type 3 = Theatrical, Type 2 = Theatrical (limited)
           final theatricalRelease = releaseDates.firstWhere(
@@ -274,6 +294,9 @@ class TMDbRepository {
         return movies;
       }
 
+      if (response.statusCode == 401) {
+        _apiStatus = TmdbApiStatus.unauthorized;
+      }
       developer.log('Failed to fetch from $endpoint: ${response.statusCode}', name: 'TMDbRepository');
       return [];
     } catch (e) {
@@ -346,14 +369,14 @@ class TMDbRepository {
         originalReleaseYear = baseReleaseDate.year;
       }
 
-      // Find German releases for Swiss release date
-      final germanReleases = results.firstWhere(
-        (result) => result['iso_3166_1'] == 'DE',
+      // Find releases for the configured country
+      final countryReleases = results.firstWhere(
+        (result) => result['iso_3166_1'] == _releaseCountry,
         orElse: () => null,
       );
 
-      if (germanReleases != null) {
-        final releaseDates = germanReleases['release_dates'] as List;
+      if (countryReleases != null) {
+        final releaseDates = countryReleases['release_dates'] as List;
 
         // Type 3 = Theatrical, Type 2 = Theatrical (limited)
         final theatricalRelease = releaseDates.firstWhere(
@@ -372,7 +395,7 @@ class TMDbRepository {
           releaseDate = Movie.tbdDate;
         }
       } else {
-        // No German release found, use default release_date
+        // No release found for configured country, use default release_date
         final releaseDateStr = data['release_date'] as String?;
         releaseDate = releaseDateStr != null && releaseDateStr.isNotEmpty
             ? DateTime.parse(releaseDateStr)

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import '../controllers/settings_controller.dart';
 import '../controllers/movie_controller.dart';
 import '../services/import_export_service.dart';
 import '../constants/app_icons.dart';
 import '../constants/app_colors.dart';
+import '../l10n/app_localizations.dart';
 import 'streaming_services_screen.dart';
 
 /// Settings screen for app configuration
@@ -16,34 +18,46 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  String _appVersion = '';
+
+  @override
+  void initState() {
+    super.initState();
+    PackageInfo.fromPlatform().then((info) {
+      if (mounted) setState(() => _appVersion = info.version);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Consumer<SettingsController>(
       builder: (context, settingsController, _) {
         return ListView(
           children: [
-            _buildSectionHeader('Data Management'),
-            _buildDataManagementSection(context),
+            _buildSectionHeader(l10n.sectionDataManagement),
+            _buildDataManagementSection(context, l10n),
             const Divider(),
-            _buildSectionHeader('Appearance'),
-            _buildDarkModeToggle(settingsController),
-            _buildTitleLanguageSelector(settingsController),
+            _buildSectionHeader(l10n.sectionAppearance),
+            _buildDisplayLanguageSelector(settingsController, l10n),
+            _buildDarkModeToggle(settingsController, l10n),
+            _buildTitleLanguageSelector(settingsController, l10n),
+            _buildReleaseCountrySelector(settingsController, l10n),
             const Divider(),
-            _buildSectionHeader('Streaming Services'),
-            _buildStreamingServicesButton(context, settingsController),
+            _buildSectionHeader(l10n.sectionStreamingServices),
+            _buildStreamingServicesButton(context, settingsController, l10n),
             const Divider(),
-            _buildSectionHeader('Notifications'),
-            _buildNotificationSettings(settingsController),
+            _buildSectionHeader(l10n.sectionNotifications),
+            _buildNotificationSettings(settingsController, l10n),
             const Divider(),
-            _buildSectionHeader('About'),
-            _buildAboutTile(),
+            _buildSectionHeader(l10n.sectionAbout),
+            _buildAboutTile(l10n),
           ],
         );
       },
     );
   }
 
-  /// Build section header with gold styling
   Widget _buildSectionHeader(String title) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
@@ -58,21 +72,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  /// Build data management section
-  Widget _buildDataManagementSection(BuildContext context) {
+  Widget _buildDataManagementSection(BuildContext context, AppLocalizations l10n) {
     return Column(
       children: [
-        const ListTile(
-          leading: Icon(AppIcons.update),
-          title: Text('Automatic Updates'),
-          subtitle: Text('Release dates update automatically every week'),
+        ListTile(
+          leading: const Icon(AppIcons.update),
+          title: Text(l10n.automaticUpdates),
+          subtitle: Text(l10n.automaticUpdatesSubtitle),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: ElevatedButton.icon(
-            onPressed: () => _refreshDataFromTMDb(context),
+            onPressed: () => _refreshDataFromTMDb(context, l10n),
             icon: const Icon(AppIcons.refresh),
-            label: const Text('Refresh Data from TMDb'),
+            label: Text(l10n.refreshFromTmdb),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size.fromHeight(48),
               backgroundColor: AppColors.gold,
@@ -83,7 +96,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            'Updates all movies with latest data from TMDb (release dates, streaming availability, etc.).\nThis runs automatically every week in the background.',
+            l10n.refreshFromTmdbDescription,
             style: TextStyle(
               fontSize: 12,
               color: Colors.grey[600],
@@ -97,9 +110,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: ElevatedButton.icon(
-            onPressed: () => _showExportDialog(context),
+            onPressed: () => _showExportDialog(context, l10n),
             icon: const Icon(AppIcons.export),
-            label: const Text('Export Data'),
+            label: Text(l10n.exportData),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size.fromHeight(48),
               backgroundColor: AppColors.gold,
@@ -110,9 +123,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: ElevatedButton.icon(
-            onPressed: () => _importData(context),
+            onPressed: () => _importData(context, l10n),
             icon: const Icon(AppIcons.import),
-            label: const Text('Import Data'),
+            label: Text(l10n.importData),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size.fromHeight(48),
               backgroundColor: AppColors.gold,
@@ -123,7 +136,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            'Export or import your watchlist and library data as JSON files.',
+            l10n.exportImportDescription,
             style: TextStyle(
               fontSize: 12,
               color: Colors.grey[600],
@@ -136,10 +149,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: OutlinedButton.icon(
-            onPressed: () => _clearDatabase(context),
+            onPressed: () => _clearDatabase(context, l10n),
             icon: const Icon(AppIcons.deletePermanent, color: AppColors.destructive),
-            label: const Text('Clear All Movies',
-                style: TextStyle(color: AppColors.destructive)),
+            label: Text(l10n.clearAllMovies,
+                style: const TextStyle(color: AppColors.destructive)),
             style: OutlinedButton.styleFrom(
               minimumSize: const Size.fromHeight(48),
               side: const BorderSide(color: AppColors.destructive),
@@ -150,23 +163,46 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  /// Build dark mode toggle
-  Widget _buildDarkModeToggle(SettingsController settingsController) {
+  Widget _buildDisplayLanguageSelector(
+      SettingsController settingsController, AppLocalizations l10n) {
+    const languages = {
+      '': 'Auto',
+      'en': 'English',
+      'de': 'Deutsch',
+      'fr': 'Français',
+      'it': 'Italiano',
+      'es': 'Español',
+    };
+
+    final current = settingsController.appLanguage;
+    final currentName = languages[current] ?? l10n.displayLanguageAuto;
+
+    return ListTile(
+      leading: const Icon(AppIcons.language),
+      title: Text(l10n.displayLanguage),
+      subtitle: Text(current.isEmpty ? l10n.displayLanguageAuto : currentName),
+      trailing: const Icon(AppIcons.chevronRight),
+      onTap: () => _showDisplayLanguageDialog(settingsController, languages, l10n),
+    );
+  }
+
+  Widget _buildDarkModeToggle(
+      SettingsController settingsController, AppLocalizations l10n) {
     return SwitchListTile(
       secondary: Icon(
         settingsController.darkMode ? AppIcons.darkMode : AppIcons.lightMode,
       ),
-      title: const Text('Dark Mode'),
+      title: Text(l10n.darkMode),
       subtitle: Text(settingsController.darkMode
-          ? 'Dark theme enabled'
-          : 'Light theme enabled'),
+          ? l10n.darkThemeEnabled
+          : l10n.lightThemeEnabled),
       value: settingsController.darkMode,
       onChanged: (_) => settingsController.toggleDarkMode(),
     );
   }
 
-  /// Build title language selector
-  Widget _buildTitleLanguageSelector(SettingsController settingsController) {
+  Widget _buildTitleLanguageSelector(
+      SettingsController settingsController, AppLocalizations l10n) {
     const languages = {
       'en': 'English',
       'de': 'Deutsch',
@@ -180,24 +216,157 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return ListTile(
       leading: const Icon(AppIcons.translate),
-      title: const Text('Movie Title Language'),
+      title: Text(l10n.movieTitleLanguage),
       subtitle: Text(currentLanguageName),
       trailing: const Icon(AppIcons.chevronRight),
-      onTap: () => _showLanguageDialog(settingsController, languages),
+      onTap: () => _showLanguageDialog(settingsController, languages, l10n),
     );
   }
 
-  /// Show language selection dialog
+  Widget _buildReleaseCountrySelector(
+      SettingsController settingsController, AppLocalizations l10n) {
+    const countries = {
+      'DE': 'Germany',
+      'CH': 'Switzerland',
+      'AT': 'Austria',
+      'US': 'United States',
+      'GB': 'United Kingdom',
+      'FR': 'France',
+      'IT': 'Italy',
+      'ES': 'Spain',
+    };
+
+    final currentCountry = settingsController.releaseCountry;
+    final currentCountryName = countries[currentCountry] ?? currentCountry;
+
+    return ListTile(
+      leading: const Icon(AppIcons.location),
+      title: Text(l10n.releaseDateCountry),
+      subtitle: Text(currentCountryName),
+      trailing: const Icon(AppIcons.chevronRight),
+      onTap: () => _showCountryDialog(settingsController, countries, l10n),
+    );
+  }
+
+  Future<void> _showDisplayLanguageDialog(
+    SettingsController settingsController,
+    Map<String, String> languages,
+    AppLocalizations l10n,
+  ) async {
+    final current = settingsController.appLanguage;
+
+    final selected = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.selectDisplayLanguage),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: languages.entries.map((entry) {
+              final displayName = entry.key.isEmpty
+                  ? l10n.displayLanguageAuto
+                  : entry.value;
+              return RadioListTile<String>(
+                title: Text(displayName),
+                value: entry.key,
+                groupValue: current,
+                activeColor: AppColors.gold,
+                onChanged: (value) => Navigator.of(context).pop(value),
+              );
+            }).toList(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.cancel),
+          ),
+        ],
+      ),
+    );
+
+    if (selected != null && selected != current) {
+      await settingsController.updateAppLanguage(selected);
+    }
+  }
+
+  Future<void> _showCountryDialog(
+    SettingsController settingsController,
+    Map<String, String> countries,
+    AppLocalizations l10n,
+  ) async {
+    final currentCountry = settingsController.releaseCountry;
+
+    final selectedCountry = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.selectReleaseDateCountry),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: countries.entries.map((entry) {
+              return RadioListTile<String>(
+                title: Text(entry.value),
+                value: entry.key,
+                groupValue: currentCountry,
+                activeColor: AppColors.gold,
+                onChanged: (value) => Navigator.of(context).pop(value),
+              );
+            }).toList(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.cancel),
+          ),
+        ],
+      ),
+    );
+
+    if (selectedCountry != null && selectedCountry != currentCountry) {
+      await settingsController.updateReleaseCountry(selectedCountry);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              l10n.updatingMovieTitles(countries[selectedCountry]!),
+            ),
+            backgroundColor: AppColors.gold,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+
+        final movieController = context.read<MovieController>();
+        final updatedCount = await movieController.refreshAllDataFromTMDb();
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                l10n.updatedMovieTitles(updatedCount, countries[selectedCountry]!),
+              ),
+              backgroundColor: AppColors.gold,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
+      }
+    }
+  }
+
   Future<void> _showLanguageDialog(
     SettingsController settingsController,
     Map<String, String> languages,
+    AppLocalizations l10n,
   ) async {
     final currentLanguage = settingsController.titleLanguage;
 
     final selectedLanguage = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Select Title Language'),
+        title: Text(l10n.selectTitleLanguage),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: languages.entries.map((entry) {
@@ -213,7 +382,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
         ],
       ),
@@ -225,9 +394,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              'Updating movie titles to ${languages[selectedLanguage]}...',
-            ),
+            content: Text(l10n.updatingMovieTitles(languages[selectedLanguage]!)),
             backgroundColor: AppColors.gold,
             behavior: SnackBarBehavior.floating,
           ),
@@ -241,7 +408,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'Updated $updatedCount movie(s) to ${languages[selectedLanguage]}',
+                l10n.updatedMovieTitles(updatedCount, languages[selectedLanguage]!),
               ),
               backgroundColor: AppColors.gold,
               behavior: SnackBarBehavior.floating,
@@ -252,21 +419,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  /// Build streaming services button
   Widget _buildStreamingServicesButton(
-      BuildContext context, SettingsController settingsController) {
+      BuildContext context,
+      SettingsController settingsController,
+      AppLocalizations l10n) {
     final selectedCount = settingsController.streamingServices.length;
 
     return Column(
       children: [
         ListTile(
           leading: const Icon(AppIcons.subscriptions),
-          title: const Text('Manage Streaming Services'),
-          subtitle: Text(
-            selectedCount > 0
-                ? '$selectedCount service${selectedCount == 1 ? '' : 's'} selected'
-                : 'No services selected',
-          ),
+          title: Text(l10n.manageStreamingServices),
+          subtitle: Text(l10n.servicesSelected(selectedCount)),
           trailing: const Icon(AppIcons.chevronRight),
           onTap: () {
             Navigator.push(
@@ -305,47 +469,46 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  /// Build notification settings section
-  Widget _buildNotificationSettings(SettingsController settingsController) {
+  Widget _buildNotificationSettings(
+      SettingsController settingsController, AppLocalizations l10n) {
     return Column(
       children: [
         SwitchListTile(
           secondary: const Icon(AppIcons.notifications),
-          title: const Text('Enable Notifications'),
-          subtitle: const Text('Master notification toggle'),
+          title: Text(l10n.enableNotifications),
+          subtitle: Text(l10n.masterNotificationToggle),
           value: settingsController.notificationsEnabled,
           onChanged: (_) => settingsController.toggleNotifications(),
         ),
         if (settingsController.notificationsEnabled) ...[
           _buildNotificationToggle(
-            'Sunday Before Release',
-            'Get reminded the Sunday before a movie releases',
+            l10n.sundayBeforeRelease,
+            l10n.sundayBeforeReleaseSubtitle,
             settingsController.settings?.sundayBeforeNotifications ?? true,
             () => settingsController.toggleSundayBeforeNotification(),
           ),
           _buildNotificationToggle(
-            'Release Day',
-            'Get notified when a movie releases',
+            l10n.releaseDayNotification,
+            l10n.releaseDaySubtitle,
             settingsController.settings?.releaseDayNotifications ?? true,
             () => settingsController.toggleReleaseDayNotification(),
           ),
           _buildNotificationToggle(
-            'Saturday After Release',
-            'Get reminded the Saturday after release',
+            l10n.saturdayAfterRelease,
+            l10n.saturdayAfterReleaseSubtitle,
             settingsController.settings?.saturdayAfterNotifications ?? true,
             () => settingsController.toggleSaturdayAfterNotification(),
           ),
           _buildNotificationToggle(
-            'Left Cinema',
-            'Get notified when a movie leaves cinema',
+            l10n.leftCinema,
+            l10n.leftCinemaSubtitle,
             settingsController.settings?.leftCinemaNotifications ?? true,
             () => settingsController.toggleLeftCinemaNotification(),
           ),
           _buildNotificationToggle(
-            'Streaming Available',
-            'Get notified when available on your streaming services',
-            settingsController.settings?.streamingAvailableNotifications ??
-                true,
+            l10n.streamingAvailableNotification,
+            l10n.streamingAvailableSubtitle,
+            settingsController.settings?.streamingAvailableNotifications ?? true,
             () => settingsController.toggleStreamingAvailableNotification(),
           ),
         ],
@@ -353,7 +516,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  /// Build individual notification toggle
   Widget _buildNotificationToggle(
       String title, String subtitle, bool value, VoidCallback onToggle) {
     return SwitchListTile(
@@ -365,33 +527,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  /// Build about tile
-  Widget _buildAboutTile() {
-    return const ListTile(
-      leading: Icon(AppIcons.info),
-      title: Text('Version'),
-      subtitle: Text('BeStWatchList v1.0.0'),
+  Widget _buildAboutTile(AppLocalizations l10n) {
+    return ListTile(
+      leading: const Icon(AppIcons.info),
+      title: Text(l10n.versionLabel),
+      subtitle: Text('BeStWatchList v$_appVersion'),
     );
   }
 
-  /// Refresh all data from TMDb for all movies
-  Future<void> _refreshDataFromTMDb(BuildContext context) async {
+  Future<void> _refreshDataFromTMDb(
+      BuildContext context, AppLocalizations l10n) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Refresh Data from TMDb?'),
-        content: const Text(
-          'This will update all movies with the latest data from TMDb '
-          '(release dates, streaming availability, posters, etc.). This may take a moment.',
-        ),
+        title: Text(l10n.refreshFromTmdbTitle),
+        content: Text(l10n.refreshFromTmdbConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Refresh'),
+            child: Text(l10n.refresh),
           ),
         ],
       ),
@@ -403,8 +561,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  /// Show export dialog with options
-  Future<void> _showExportDialog(BuildContext context) async {
+  Future<void> _showExportDialog(
+      BuildContext context, AppLocalizations l10n) async {
     bool includeWatchlist = true;
     bool includeLibrary = true;
     bool includeSettings = true;
@@ -413,15 +571,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: const Text('Export Data'),
+          title: Text(l10n.exportDataTitle),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Select what to export:'),
+              Text(l10n.selectWhatToExport),
               const SizedBox(height: 16),
               CheckboxListTile(
-                title: const Text('Watchlist'),
-                subtitle: const Text('Movies you want to watch (Cinema)'),
+                title: Text(l10n.exportWatchlist),
+                subtitle: Text(l10n.exportWatchlistSubtitle),
                 value: includeWatchlist,
                 onChanged: (value) {
                   setState(() => includeWatchlist = value ?? true);
@@ -429,8 +587,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 activeColor: AppColors.gold,
               ),
               CheckboxListTile(
-                title: const Text('Library'),
-                subtitle: const Text('Watched, rewatch, streaming'),
+                title: Text(l10n.exportLibrary),
+                subtitle: Text(l10n.exportLibrarySubtitle),
                 value: includeLibrary,
                 onChanged: (value) {
                   setState(() => includeLibrary = value ?? true);
@@ -438,8 +596,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 activeColor: AppColors.gold,
               ),
               CheckboxListTile(
-                title: const Text('Settings'),
-                subtitle: const Text('Notifications, streaming services'),
+                title: Text(l10n.exportSettingsLabel),
+                subtitle: Text(l10n.exportSettingsSubtitle),
                 value: includeSettings,
                 onChanged: (value) {
                   setState(() => includeSettings = value ?? true);
@@ -451,13 +609,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel'),
+              child: Text(l10n.cancel),
             ),
             TextButton(
               onPressed: (includeWatchlist || includeLibrary || includeSettings)
                   ? () => Navigator.of(context).pop(true)
                   : null,
-              child: const Text('Export'),
+              child: Text(l10n.exportAction),
             ),
           ],
         ),
@@ -477,8 +635,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       if (context.mounted) {
         if (result.success) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Data exported successfully'),
+            SnackBar(
+              content: Text(l10n.dataExportedSuccess),
               backgroundColor: AppColors.gold,
               behavior: SnackBarBehavior.floating,
             ),
@@ -488,7 +646,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Export failed: ${result.error}'),
+              content: Text(l10n.exportFailed(result.error ?? '')),
               backgroundColor: AppColors.destructive,
               behavior: SnackBarBehavior.floating,
             ),
@@ -498,24 +656,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  /// Import data from a file
-  Future<void> _importData(BuildContext context) async {
+  Future<void> _importData(BuildContext context, AppLocalizations l10n) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Import Data'),
-        content: const Text(
-          'Select a BeStWatchList JSON file to import. '
-          'Duplicate movies will be skipped.',
-        ),
+        title: Text(l10n.importDataTitle),
+        content: Text(l10n.importDataDescription),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Select File'),
+            child: Text(l10n.selectFile),
           ),
         ],
       ),
@@ -523,16 +677,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     if (confirmed == true && context.mounted) {
       final movieController = context.read<MovieController>();
-      final result = await movieController.importData();
+      final settingsController = context.read<SettingsController>();
+      final result = await movieController.importData(
+        applySettings: settingsController.applyImportedSettings,
+      );
 
       if (context.mounted) {
         if (result.success) {
+          final message = result.settingsImported
+              ? l10n.importedMoviesWithSettings(
+                  result.moviesImported, result.moviesSkipped)
+              : l10n.importedMovies(result.moviesImported, result.moviesSkipped);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(
-                'Imported ${result.moviesImported} movie(s), '
-                '${result.moviesSkipped} skipped',
-              ),
+              content: Text(message),
               backgroundColor: AppColors.gold,
               behavior: SnackBarBehavior.floating,
             ),
@@ -540,7 +698,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(result.error ?? 'Import failed'),
+              content: Text(result.error ?? l10n.importData),
               backgroundColor: AppColors.destructive,
               behavior: SnackBarBehavior.floating,
             ),
@@ -550,25 +708,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  /// Clear all movies from database
-  Future<void> _clearDatabase(BuildContext context) async {
+  Future<void> _clearDatabase(
+      BuildContext context, AppLocalizations l10n) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Clear All Movies?'),
-        content: const Text(
-          'This will delete all your movies from local storage. '
-          'This action cannot be undone. Are you sure?',
-        ),
+        title: Text(l10n.clearAllMoviesTitle),
+        content: Text(l10n.clearAllMoviesConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
             style: TextButton.styleFrom(foregroundColor: AppColors.destructive),
-            child: const Text('Clear All'),
+            child: Text(l10n.clearAll),
           ),
         ],
       ),
@@ -580,8 +735,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('All movies cleared'),
+          SnackBar(
+            content: Text(l10n.allMoviesCleared),
             backgroundColor: AppColors.gold,
             behavior: SnackBarBehavior.floating,
           ),

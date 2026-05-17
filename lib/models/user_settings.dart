@@ -38,6 +38,12 @@ class UserSettings extends HiveObject {
   @HiveField(11)
   String titleLanguage;
 
+  @HiveField(12)
+  String releaseDateCountry;
+
+  @HiveField(13)
+  String appLanguage;
+
   UserSettings({
     this.streamingServices = const [],
     this.notificationsEnabled = true,
@@ -50,6 +56,8 @@ class UserSettings extends HiveObject {
     DateTime? lastModified,
     this.needsSync = true,
     this.titleLanguage = 'en',
+    this.releaseDateCountry = 'DE',
+    this.appLanguage = '',
   }) : lastModified = lastModified ?? DateTime.now();
 
   /// Create default settings
@@ -64,6 +72,28 @@ class UserSettings extends HiveObject {
       streamingAvailableNotifications: true,
       darkMode: true,
       titleLanguage: 'en',
+      releaseDateCountry: 'DE',
+      appLanguage: '',
+    );
+  }
+
+  /// Create settings from a Map (reverse of toMap)
+  static UserSettings fromMap(Map<String, dynamic> map) {
+    return UserSettings(
+      streamingServices: map['streamingServices'] != null
+          ? List<String>.from(map['streamingServices'] as List)
+          : [],
+      notificationsEnabled: map['notificationsEnabled'] as bool? ?? true,
+      sundayBeforeNotifications: map['sundayBeforeNotifications'] as bool? ?? true,
+      releaseDayNotifications: map['releaseDayNotifications'] as bool? ?? true,
+      saturdayAfterNotifications: map['saturdayAfterNotifications'] as bool? ?? true,
+      leftCinemaNotifications: map['leftCinemaNotifications'] as bool? ?? true,
+      streamingAvailableNotifications: map['streamingAvailableNotifications'] as bool? ?? true,
+      darkMode: map['darkMode'] as bool? ?? true,
+      titleLanguage: map['titleLanguage'] as String? ?? 'en',
+      releaseDateCountry: map['releaseDateCountry'] as String? ?? 'DE',
+      appLanguage: map['appLanguage'] as String? ?? '',
+      needsSync: true,
     );
   }
 
@@ -79,6 +109,8 @@ class UserSettings extends HiveObject {
       'streamingAvailableNotifications': streamingAvailableNotifications,
       'darkMode': darkMode,
       'titleLanguage': titleLanguage,
+      'releaseDateCountry': releaseDateCountry,
+      'appLanguage': appLanguage,
       'lastModified': lastModified?.toIso8601String(),
     };
   }
@@ -102,6 +134,8 @@ class UserSettings extends HiveObject {
     DateTime? lastModified,
     bool? needsSync,
     String? titleLanguage,
+    String? releaseDateCountry,
+    String? appLanguage,
   }) {
     return UserSettings(
       streamingServices: streamingServices ?? this.streamingServices,
@@ -120,6 +154,8 @@ class UserSettings extends HiveObject {
       lastModified: lastModified ?? this.lastModified,
       needsSync: needsSync ?? this.needsSync,
       titleLanguage: titleLanguage ?? this.titleLanguage,
+      releaseDateCountry: releaseDateCountry ?? this.releaseDateCountry,
+      appLanguage: appLanguage ?? this.appLanguage,
     );
   }
 }

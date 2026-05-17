@@ -6,6 +6,7 @@ import '../views/widgets/movie_card.dart';
 import '../constants/app_icons.dart';
 import '../constants/app_colors.dart';
 import '../widgets/action_buttons.dart';
+import '../l10n/app_localizations.dart';
 
 /// Browse screen for discovering and searching movies from TMDb
 class BrowseScreen extends StatefulWidget {
@@ -36,7 +37,6 @@ class _BrowseScreenState extends State<BrowseScreen> {
     super.dispose();
   }
 
-  /// Load upcoming movies from TMDb
   Future<void> _loadUpcomingMovies() async {
     setState(() {
       _isLoading = true;
@@ -45,34 +45,28 @@ class _BrowseScreenState extends State<BrowseScreen> {
     final movieController = context.read<MovieController>();
     final allUpcoming = await movieController.getUpcomingMoviesFromTMDb();
 
-    // Filter to show only movies releasing in the next 2 weeks
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final twoWeeksFromNow = today.add(const Duration(days: 14));
 
     var filteredMovies = allUpcoming.where((movie) {
-      // Exclude TBD movies from the 2-week filter
       if (movie.isTbd) return false;
-
       final releaseDate = DateTime(
         movie.releaseDate.year,
         movie.releaseDate.month,
         movie.releaseDate.day,
       );
-      // Include movies from today up to 2 weeks from now
       return (releaseDate.isAtSameMomentAs(today) ||
               releaseDate.isAfter(today)) &&
           (releaseDate.isBefore(twoWeeksFromNow) ||
               releaseDate.isAtSameMomentAs(twoWeeksFromNow));
     }).toList();
 
-    // If no movies in next 2 weeks, show all upcoming movies
     final showingFilteredResults = filteredMovies.isNotEmpty;
     if (filteredMovies.isEmpty) {
       filteredMovies = allUpcoming;
     }
 
-    // Sort by release date (earliest first, TBD movies at the end)
     filteredMovies.sort((a, b) {
       if (a.isTbd && b.isTbd) return 0;
       if (a.isTbd) return 1;
@@ -87,7 +81,6 @@ class _BrowseScreenState extends State<BrowseScreen> {
     });
   }
 
-  /// Search movies on TMDb
   Future<void> _searchMovies(String query) async {
     if (query.isEmpty) {
       setState(() {
@@ -113,21 +106,47 @@ class _BrowseScreenState extends State<BrowseScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final movieController = context.watch<MovieController>();
+    final apiStatus = movieController.tmdbApiStatus;
     return Column(
       children: [
-        _buildSearchBar(),
-        if (!_isSearching) _buildUpcomingHeader(),
+        if (apiStatus != TmdbApiStatus.ok) _buildApiWarningBanner(apiStatus, l10n),
+        _buildSearchBar(l10n),
+        if (!_isSearching) _buildUpcomingHeader(l10n),
         Expanded(
           child: _isLoading
               ? const Center(child: CircularProgressIndicator())
-              : _buildMovieList(),
+              : _buildMovieList(l10n),
         ),
       ],
     );
   }
 
-  /// Build the search bar widget
-  Widget _buildSearchBar() {
+  Widget _buildApiWarningBanner(TmdbApiStatus status, AppLocalizations l10n) {
+    final message = status == TmdbApiStatus.notConfigured
+        ? l10n.tmdbApiKeyMissing
+        : l10n.tmdbApiKeyInvalid;
+    return Container(
+      width: double.infinity,
+      color: Colors.orange[800],
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: Row(
+        children: [
+          const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 18),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              message,
+              style: const TextStyle(color: Colors.white, fontSize: 13),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchBar(AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -143,7 +162,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
       child: TextField(
         controller: _searchController,
         decoration: InputDecoration(
-          hintText: 'Search movies on TMDb...',
+          hintText: l10n.searchTmdbHint,
           prefixIcon: const Icon(AppIcons.search),
           suffixIcon: _searchQuery.isNotEmpty
               ? IconButton(
@@ -175,11 +194,10 @@ class _BrowseScreenState extends State<BrowseScreen> {
     );
   }
 
-  /// Build the header showing upcoming movies section
-  Widget _buildUpcomingHeader() {
+  Widget _buildUpcomingHeader(AppLocalizations l10n) {
     final headerText = _showingFilteredResults
-        ? 'Upcoming Movies (Next 2 Weeks)'
-        : 'Upcoming Movies';
+        ? l10n.upcomingMoviesNext2Weeks
+        : l10n.upcomingMovies;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -216,17 +234,16 @@ class _BrowseScreenState extends State<BrowseScreen> {
     );
   }
 
-  /// Build the movie list
-  Widget _buildMovieList() {
+  Widget _buildMovieList(AppLocalizations l10n) {
     final movies = _isSearching ? _searchResults : _upcomingMovies;
 
     if (movies.isEmpty) {
       return EmptyStateWidget(
         icon: AppIcons.movieOutline,
-        title: _isSearching ? 'No movies found' : 'No upcoming movies',
+        title: _isSearching ? l10n.noMoviesFound : l10n.noUpcomingMovies,
         subtitle: _isSearching
-            ? 'Try a different search term'
-            : 'Check back later or use search to find movies',
+            ? l10n.tryDifferentSearch
+            : l10n.checkBackLater,
       );
     }
 
@@ -237,7 +254,6 @@ class _BrowseScreenState extends State<BrowseScreen> {
           itemBuilder: (context, index) {
             final movie = movies[index];
 
-            // Check if movie is already on watchlist
             final existingMovie = movieController.movies
                 .where((m) => m.id == movie.id)
                 .firstOrNull;
@@ -255,14 +271,15 @@ class _BrowseScreenState extends State<BrowseScreen> {
                       color: isOnWatchlist ? AppColors.bookmarkActive : null,
                     ),
                     tooltip: isOnWatchlist
-                        ? 'Remove from watchlist'
-                        : 'Add to watchlist',
+                        ? l10n.removeFromWatchlist
+                        : l10n.addToWatchlist,
                     onPressed: () => _toggleWatchlist(
                       context,
                       movieController,
                       movie,
                       existingMovie,
                       isOnWatchlist,
+                      l10n,
                     ),
                   ),
                 ],
@@ -274,35 +291,32 @@ class _BrowseScreenState extends State<BrowseScreen> {
     );
   }
 
-  /// Toggle movie watchlist status
   Future<void> _toggleWatchlist(
     BuildContext context,
     MovieController movieController,
     Movie movie,
     Movie? existingMovie,
     bool isCurrentlyOnWatchlist,
+    AppLocalizations l10n,
   ) async {
     if (isCurrentlyOnWatchlist && existingMovie != null) {
-      // Remove from watchlist by deleting
       await movieController.deleteMovie(existingMovie);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${movie.title} removed from watchlist')),
+          SnackBar(content: Text(l10n.movieRemovedFromWatchlist(movie.title))),
         );
       }
     } else {
       if (existingMovie != null) {
-        // Movie exists, update status to wantToWatch
         await movieController.updateMovieStatus(
             existingMovie, WatchStatus.wantToWatch);
       } else {
-        // New movie, add to watchlist
         await movieController.addToWatchlist(movie);
       }
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${movie.title} added to watchlist')),
+          SnackBar(content: Text(l10n.movieAddedToWatchlist(movie.title))),
         );
       }
     }

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../models/movie.dart';
 import '../../constants/app_icons.dart';
-import '../../constants/menu_items.dart';
 import '../../widgets/action_buttons.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Reusable movie card widget (DRY principle)
 class MovieCard extends StatelessWidget {
@@ -31,13 +31,12 @@ class MovieCard extends StatelessWidget {
           movie.title,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: _buildSubtitle(),
+        subtitle: _buildSubtitle(context),
         trailing: trailing,
       ),
     );
   }
 
-  /// Build movie poster or placeholder
   Widget _buildPoster() {
     if (movie.posterUrl != null) {
       return ClipRRect(
@@ -55,7 +54,6 @@ class MovieCard extends StatelessWidget {
     return _buildPlaceholderPoster();
   }
 
-  /// Build placeholder poster
   Widget _buildPlaceholderPoster() {
     return Container(
       width: 50,
@@ -68,13 +66,13 @@ class MovieCard extends StatelessWidget {
     );
   }
 
-  /// Build subtitle with release date and description
-  Widget _buildSubtitle() {
+  Widget _buildSubtitle(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          _formatDate(movie.releaseDate),
+          _formatDate(movie.releaseDate, l10n),
           style: const TextStyle(fontSize: 13),
         ),
         if (showDescription && movie.description != null)
@@ -88,21 +86,20 @@ class MovieCard extends StatelessWidget {
     );
   }
 
-  /// Format date helper
-  String _formatDate(DateTime date) {
-    // Check if TBD
+  String _formatDate(DateTime date, AppLocalizations l10n) {
     if (movie.isTbd) {
-      return 'Release Date: TBD';
+      return l10n.releaseDateTbd;
     }
 
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final releaseDay = DateTime(date.year, date.month, date.day);
+    final formatted = '${date.day}.${date.month}.${date.year}';
     if (releaseDay.isAfter(today)) {
       final days = releaseDay.difference(today).inDays;
-      return 'Releases ${date.day}.${date.month}.${date.year} (in $days days)';
+      return l10n.releasesInDays(formatted, days);
     } else {
-      return 'Released ${date.day}.${date.month}.${date.year}';
+      return l10n.releasedOnDate(formatted);
     }
   }
 }
@@ -119,21 +116,22 @@ class MovieInfoButton extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    final l10n = AppLocalizations.of(context)!;
     return ActionIconButton(
       icon: AppIcons.info,
-      tooltip: movie.tmdbUrl != null ? 'Open TMDb' : 'Open IMDb',
-      onPressed: () => _launchUrl(context, movie.tmdbUrl ?? movie.imdbUrl!),
+      tooltip: movie.tmdbUrl != null ? l10n.openTmdb : l10n.openImdb,
+      onPressed: () => _launchUrl(context, movie.tmdbUrl ?? movie.imdbUrl!, l10n),
     );
   }
 
-  /// Launch URL in external browser
-  Future<void> _launchUrl(BuildContext context, String url) async {
+  Future<void> _launchUrl(
+      BuildContext context, String url, AppLocalizations l10n) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     } else if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not open link')),
+        SnackBar(content: Text(l10n.couldNotOpenLink)),
       );
     }
   }
@@ -156,10 +154,12 @@ class MovieActionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         ActionPopupMenu(
+          tooltip: l10n.moreActions,
           onSelected: (value) {
             switch (value) {
               case 'watched':
@@ -174,9 +174,21 @@ class MovieActionButtons extends StatelessWidget {
             }
           },
           items: [
-            ActionMenuItem.fromData(AppMenuItems.markWatched),
-            ActionMenuItem.fromData(AppMenuItems.rewatch),
-            ActionMenuItem.fromData(AppMenuItems.delete),
+            ActionMenuItem(
+              value: 'watched',
+              icon: AppIcons.markWatched,
+              label: l10n.menuMarkWatched,
+            ),
+            ActionMenuItem(
+              value: 'rewatch',
+              icon: AppIcons.rewatch,
+              label: l10n.menuWantToRewatch,
+            ),
+            ActionMenuItem(
+              value: 'delete',
+              icon: AppIcons.delete,
+              label: l10n.menuDelete,
+            ),
           ],
         ),
       ],

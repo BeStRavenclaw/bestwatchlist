@@ -3,6 +3,7 @@ import 'dart:developer' as developer;
 import '../models/movie.dart';
 import '../repositories/movie_repository.dart';
 import '../repositories/tmdb_repository.dart';
+export '../repositories/tmdb_repository.dart' show TmdbApiStatus;
 import '../repositories/settings_repository.dart';
 import '../services/home_widget_service.dart';
 import '../services/notification_service.dart';
@@ -36,6 +37,7 @@ class MovieController extends ChangeNotifier {
   List<Movie> get movies => _movies;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
+  TmdbApiStatus get tmdbApiStatus => _tmdbRepository.apiStatus;
 
   /// Get movies filtered by status
   List<Movie> getMoviesByStatus(WatchStatus status) {
@@ -404,7 +406,9 @@ class MovieController extends ChangeNotifier {
 
   /// Import movies from a JSON file
   /// Returns ImportResult with details about the operation
-  Future<ImportResult> importData() async {
+  Future<ImportResult> importData({
+    Future<void> Function(Map<String, dynamic>)? applySettings,
+  }) async {
     _setLoading(true);
     try {
       final result = await ImportExportService.importData(
@@ -414,6 +418,7 @@ class MovieController extends ChangeNotifier {
           await _scheduleNotificationsForMovie(movie);
         },
         movieExists: (id) => _movieRepository.movieExists(id),
+        applySettings: applySettings,
       );
 
       if (result.success && result.moviesImported > 0) {
