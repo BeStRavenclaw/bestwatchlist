@@ -410,6 +410,9 @@ class NotificationService {
 
   /// Cancel all notifications for a movie
   Future<void> cancelMovieNotifications(String movieId) async {
+    if (!_initialized) {
+      await initialize();
+    }
     await _notifications.cancel(_getSundayBeforeNotificationId(movieId));
     await _notifications.cancel(_getReleaseDayNotificationId(movieId));
     await _notifications.cancel(_getSaturdayAfterNotificationId(movieId));

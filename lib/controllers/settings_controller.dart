@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'dart:developer' as developer;
 import '../models/user_settings.dart';
 import '../repositories/settings_repository.dart';
 import '../services/notification_service.dart';
@@ -188,8 +189,16 @@ class SettingsController extends ChangeNotifier {
 
     final movies = await _movieRepository.getAllMovies();
     for (final movie in movies) {
-      await _notificationService.rescheduleMovieNotifications(
-          movie, _settings!);
+      try {
+        await _notificationService.rescheduleMovieNotifications(
+            movie, _settings!);
+      } catch (e) {
+        developer.log(
+          'Failed to reschedule notifications for ${movie.title}',
+          name: 'SettingsController',
+          error: e,
+        );
+      }
     }
   }
 

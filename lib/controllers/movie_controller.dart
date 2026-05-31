@@ -156,15 +156,23 @@ class MovieController extends ChangeNotifier {
   /// Remove a movie from the watchlist
   Future<void> removeFromWatchlist(Movie movie) async {
     try {
-      // Cancel all scheduled notifications for this movie
-      await _notificationService.cancelMovieNotifications(movie.id);
-
       await _movieRepository.deleteMovie(movie);
       await _loadMovies();
       _errorMessage = null;
     } catch (e) {
       _errorMessage = 'Failed to remove movie: $e';
       notifyListeners();
+      return;
+    }
+    // Cancel notifications after successful delete — best-effort, must not block delete
+    try {
+      await _notificationService.cancelMovieNotifications(movie.id);
+    } catch (e) {
+      developer.log(
+        'Failed to cancel notifications after delete for ${movie.id}',
+        name: 'MovieController',
+        error: e,
+      );
     }
   }
 
